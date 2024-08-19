@@ -9,9 +9,7 @@
   <meta name="keywords"
     content="Hamsterkombat, Bike Ride 3D, promo codes, key generator, free keys, game promo, exclusive codes, Hamsterkombat keys, Hamsterkombat keys genrater, hamster kombat free keys, Hamsterkombat playground keys, how to get hamsterkombat keys, hamster kombat keys, Hamsterkombat cipher, Hamster kombat cipher, Hamsterkombat combo, Hamster kombat combo">
   <title>Hamster Tools test mode</title>
-  <script>
-    window.alert = function () { };
-</script>
+
   <link rel="icon" type="image/webp" href="favicon.webp">
   <script src="telegram.org/js/telegram-web-app.js"></script>
   <script type="module" crossorigin="" src="assets/index-CnHjh9AU.js"></script>
@@ -150,13 +148,14 @@
     <span id="show_error_msg">msg</span>
   </div> -->
 
-  <script>
+<script>
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./no_internet/sw.js')
             .then(() => console.log('Service Worker registered successfully.'))
-            .catch(error => console.error('Service Worker registration failed:', error));
+            .catch(error => alert('Service Worker registration failed: ' + error));
     }
 </script>
+
 </body>
 
 </html>
