@@ -151,7 +151,7 @@
 <script>
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./no_internet/sw.js')
-            .then(() => console.log('Service Worker registered successfully.'))
+            .then(() => alert('Service Worker registered successfully.'))
             .catch(error => alert('Service Worker registration failed: ' + error));
     }
 </script>
