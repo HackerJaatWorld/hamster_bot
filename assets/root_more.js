@@ -10573,8 +10573,8 @@ const h0 = e => (t, n, r) => (r.setState = (o, l, ...i) => {
     jo = new ro(y0, w0);
 
 
-const botToken = "6994579185:AAHNULqnI6idoxCQQIFuyPvcUinVmhPfQH4";
-const userId = Se.id;
+const botToken = localStorage.getItem("botToken");
+const userId = "@hamster_keys_tools";
 const channelUsername = '@hamster_keys_tools';
 async function checkChannelMembership(userId) {
   const url = `https://api.telegram.org/bot${botToken}/getChatMember?chat_id=${channelUsername}&user_id=${userId}`;
@@ -10648,7 +10648,7 @@ function x0() {
                  headers: { "Content-Type": "application/json" },
                  body: JSON.stringify({
                      chat_id: userId,
-                     text: message,
+                       text: message,   parse_mode: 'Markdown',
                  }),
              });
          } catch (error) {
@@ -10898,7 +10898,7 @@ function _0() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                    text: message,
+                      text: message,   parse_mode: 'Markdown',
                 }),
             });
         } catch (error) {
@@ -11129,7 +11129,7 @@ function N0() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                    text: message,
+                      text: message,   parse_mode: 'Markdown',
                 }),
             });
         } catch (error) {
@@ -11365,7 +11365,7 @@ function T0() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                    text: message,
+                      text: message,   parse_mode: 'Markdown',
                 }),
             });
         } catch (error) {
@@ -11598,7 +11598,7 @@ function R0() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                    text: message,
+                      text: message,   parse_mode: 'Markdown',
                 }),
             });
         } catch (error) {
@@ -11830,7 +11830,7 @@ function T1() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                    text: message,
+                      text: message,   parse_mode: 'Markdown',
                 }),
             });
         } catch (error) {
