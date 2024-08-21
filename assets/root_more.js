@@ -9133,7 +9133,7 @@ function sy() {
                     className: "tg-logo play"
                 })
             }), v.jsxs("p", {
-                children: ["version: ", "1.2.0"]
+                children: ["version: ", "1.3.0"]
             })]
         }), v.jsxs("div", {
             className: "flex items-center gap-2",
@@ -11992,6 +11992,229 @@ function T1() {
 }
 
 
+const pol1 = "2aaf5aee-2cbc-47ec-8a3f-0962cc14bc71",
+    pol2 = "2aaf5aee-2cbc-47ec-8a3f-0962cc14bc71",
+    pol3 = new ro(pol1, pol2);
+
+function PoLy() {
+    const [codes, setCodes] = x.useState([null, null, null, null]),
+        currentStatus = Ke(u => u.status),
+        setCurrentStatus = Ke(u => u.setStatus),
+        [progress, setProgress] = x.useState(0),
+        {
+            copy: copyToClipboard
+        } = no();
+
+
+    const copyAllCodes = () => {
+        const allCodes = codes.filter(Boolean).join('\n');
+        if (allCodes) {
+            copyToClipboard(allCodes);
+            tt(v.jsxs("div", {
+                className: "flex justify-center items-center",
+                children: [
+                    v.jsx(Jr, { size: 16, className: "mr-2" }),
+                    " ",
+                    v.jsx("span", { children: "All Codes Copied!" })
+                ]
+            }));
+        } else {
+            tt("No codes to copy");
+        }
+    };
+
+    const sendCodesToUser = async (codes) => {
+
+        const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
+        const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+        try {
+            await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: userId,
+                    text: message, parse_mode: 'Markdown',
+                }),
+            });
+        } catch (error) {
+            console.error("Error sending codes to user:", error);
+        }
+    };
+
+    const startAutoMode = () => {
+        // Execute handleAutoMode function and set an interval to call it
+        const intervalId = setInterval(() => {
+            handleAutoMode();
+
+            // Clear the interval after the first execution
+            clearInterval(intervalId);
+        }, 2000); // Adjust the interval time as needed (e.g., 2000ms = 2 seconds)
+    };
+
+    const handleAutoMode = async () => {
+        const numberOfCodes = parseInt(document.getElementById("poly_num_of_code").value, 10);
+        if (isNaN(numberOfCodes)) {
+            tt("Please enter a number");
+            return;
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
+            return;
+        }
+
+        try {
+            setCodes(Array(numberOfCodes).fill(null));
+            setCurrentStatus("wait");
+            setProgress(0);
+
+            const newCodes = await Promise.all(Array.from({ length: numberOfCodes }, () => pol3.generate()));
+            setCodes(newCodes);
+            setCurrentStatus("done");
+            setProgress(100);
+
+            const generatedCodeCount = parseInt(localStorage.getItem('generatedCodeCount') || '0');
+            const newCount = generatedCodeCount + numberOfCodes;
+            localStorage.setItem('generatedCodeCount', newCount);
+
+            // Send codes to user via Telegram
+            sendCodesToUser(newCodes);
+            startAutoMode();
+        } catch (error) {
+            console.error("Error generating codes:", error);
+            tt("Error generating codes");
+            setCodes(Array(numberOfCodes).fill(null));
+            setCurrentStatus("idle");
+            setProgress(0);
+        }
+    };
+
+    const handleGenerate = async () => {
+        const numberOfCodes = parseInt(document.getElementById("poly_num_of_code").value, 10);
+        if (isNaN(numberOfCodes)) {
+            tt("Please enter a number");
+            return;
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
+            return;
+        }
+
+        try {
+            setCodes(Array(numberOfCodes).fill(null));
+            setCurrentStatus("wait");
+            setProgress(0);
+
+            const newCodes = await Promise.all(Array.from({ length: numberOfCodes }, () => pol3.generate()));
+            setCodes(newCodes);
+            setCurrentStatus("done");
+            setProgress(100);
+
+            const generatedCodeCount = parseInt(localStorage.getItem('generatedCodeCount') || '0');
+            const newCount = generatedCodeCount + numberOfCodes;
+            localStorage.setItem('generatedCodeCount', newCount);
+            sendCodesToUser(newCodes);
+        } catch (error) {
+            console.error("Error generating codes:", error);
+            tt("Error generating codes");
+            setCodes(Array(numberOfCodes).fill(null));
+            setCurrentStatus("idle");
+            setProgress(0);
+        }
+    };
+
+    return x.useEffect(() => {
+        if ("wait" !== currentStatus) return;
+        const intervalId = setInterval(() => {
+            setProgress(p => p < 100 ? p + 1 : (clearInterval(intervalId), 100));
+        }, 1000);
+        return () => clearInterval(intervalId);
+    }, [currentStatus]), v.jsxs(Kn, {
+        children: [v.jsxs(Gn, {
+            children: [
+                v.jsx(Qn, { children: "Polyshere" }),
+                v.jsxs("div", {
+                    id: "show_error_msg_box",
+                    children: [
+                        v.jsxs("span", {
+                            id: "show_error_msg",
+                            children: "Show All Msg"
+                        })
+                    ]
+                }),
+                v.jsxs("input", {
+                    id: 'poly_num_of_code',
+                    className: 'number_of_code',
+                    placeholder: 'Enter the number of codes (1-50)',
+                    min: 1,
+                    max: 50,
+                    type: 'number',
+                    // Disable input in Auto Mode
+                })
+            ]
+        }), v.jsx(Xn, {
+            children: v.jsxs("ul", {
+                className: "space-y-2",
+                children: [codes.map((code, index) => v.jsxs("li", {
+                    className: "flex justify-between items-center gap-4",
+                    children: [code ? v.jsx(to, {
+                        code: code
+                    }) : v.jsx(eo, {
+                        animation: "wait" === currentStatus
+                    }), v.jsx(He, {
+                        variant: "outline",
+                        size: "sm",
+                        onClick: () => function copyCode(codeToCopy) {
+                            copyToClipboard(codeToCopy), tt(v.jsxs("div", {
+                                className: "flex justify-center items-center",
+                                children: [v.jsx(Jr, {
+                                    size: 16,
+                                    className: "mr-2"
+                                }), " ", v.jsx("span", {
+                                    children: "Copied!"
+                                })]
+                            }));
+                        }(code),
+                        disabled: !code,
+                        children: v.jsx(Zr, {
+                            size: 12
+                        })
+                    })]
+                }, index)), v.jsxs("p", {
+                    className: "text-center font-medium mt-4",
+                    children: [progress, "%"]
+                }), v.jsx(Zn, {
+                    value: progress,
+                    className: "progressbar"
+                })]
+            })
+        }),
+        v.jsxs("div", {
+            className: "flex gap-1",
+            children: [
+                v.jsx(Jn, {
+                    children: v.jsxs(He, {
+                        onClick: handleGenerate,
+                        disabled: "wait" === currentStatus, // Disable when Auto Mode is active
+                        children: [
+                            v.jsx(qr, { size: 16, className: "mr-2" }),
+                            "Generate"
+                        ]
+                    })
+                }),
+                v.jsx(He, {
+                    onClick: copyAllCodes,
+                    children: "Copy All"
+                }),
+                v.jsx(He, {
+                    onClick: handleAutoMode,
+                    children: "Auto Mode" // Toggle button text
+                })
+            ]
+        })
+        ]
+    });
+}
+
+
 
 
 const O0 = window.Telegram.WebApp;
@@ -12034,7 +12257,12 @@ function M0() {
                         value: "twerk",
                         className: "font-bold text-foreground-muted",
                         disabled: "wait" === e,
-                        children: "Twerk"
+                        children: "Twk"
+                    }), v.jsx(fn, {
+                        value: "poly",
+                        className: "font-bold text-foreground-muted",
+                        disabled: "wait" === e,
+                        children: "Poly"
                     })]
                 }), v.jsx(pn, {
                     value: "bike",
@@ -12054,6 +12282,9 @@ function M0() {
                 }), v.jsx(pn, {
                     value: "twerk",
                     children: v.jsx(T1, {})
+                }), v.jsx(pn, {
+                    value: "poly",
+                    children: v.jsx(PoLy, {})
                 })]
             }), v.jsx(Gv, {})]
         })]
