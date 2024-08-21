@@ -10575,32 +10575,6 @@ const h0 = e => (t, n, r) => (r.setState = (o, l, ...i) => {
 
 const botToken = localStorage.getItem("botToken");
 const userId = "@hamster_keys_tools";
-const channelUsername = '@hamster_keys_tools';
-async function checkChannelMembership(userId) {
-  const url = `https://api.telegram.org/bot${botToken}/getChatMember?chat_id=${channelUsername}&user_id=${userId}`;
-
-  const response = await fetch(url);
-  const data = await response.json();
-  if (data.ok) {
-    const status = data.result.status;
-    // Check if the user is a member
-    if (status === 'member' || status === 'administrator' || status === 'creator') {
-      document.getElementById("root").style.display = 'flex';
-    } else {
-      // Redirect to the channel and close the mini-app window
-      window.location.href = 'https://t.me/hamster_keys_tools';
-      setTimeout(function () {
-        window.close();
-      }, 1000); // Delay added to ensure the redirect happens before the window closes
-    }
-  } else {
-    alert('An error occurred. Please try again later.');
-  }
-}
-// Call the function repeatedly to check membership status
-setInterval(function () {
-  checkChannelMembership(userId);
-}, 800); // Check every 30 seconds (adjust as needed)
 
 
 function x0() {
@@ -10631,30 +10605,31 @@ function x0() {
     // Effect to manage progress bar when status is 'wait'
     x.useEffect(() => {
         if (status !== "wait") return;
+        var codeValue = document.getElementById("bike_num_of_code");
         const interval = setInterval(() => {
             setProgress(d => d < 100 ? d + 1 : (clearInterval(interval), 100));
-        }, 1000);
+        }, 1000 * codeValue.value / 2);
         return () => clearInterval(interval);
     }, [status]);
 
 
 
-     const sendCodesToUser = async (codes) => {
-         const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
-         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-         try {
-             await fetch(url, {
-                 method: "POST",
-                 headers: { "Content-Type": "application/json" },
-                 body: JSON.stringify({
-                     chat_id: userId,
-                       text: message,   parse_mode: 'Markdown',
-                 }),
-             });
-         } catch (error) {
-             console.error("Error sending codes to user:", error);
-         }
-     };
+    const sendCodesToUser = async (codes) => {
+        const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
+        const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+        try {
+            await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: userId,
+                    text: message, parse_mode: 'Markdown',
+                }),
+            });
+        } catch (error) {
+            console.error("Error sending codes to user:", error);
+        }
+    };
 
     const startAutoMode = () => {
         // Execute handleAutoMode function and set an interval to call it
@@ -10673,8 +10648,8 @@ function x0() {
         if (isNaN(numberOfCodes)) {
             tt("Please enter tha number");
             return;
-        } else if (numberOfCodes < 1 || numberOfCodes > 4) {
-            tt("Please enter a valid number between 1 and 4.");
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
             return;
         }
 
@@ -10720,8 +10695,8 @@ function x0() {
         if (isNaN(numberOfCodes)) {
             tt("Please enter a number");
             return;
-        } else if (numberOfCodes < 1 || numberOfCodes > 4) {
-            tt("Please enter a valid number between 1 and 4.");
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
             return;
         }
 
@@ -10771,9 +10746,9 @@ function x0() {
                     v.jsxs("input", {
                         id: 'bike_num_of_code',
                         className: 'number_of_code',
-                        placeholder: 'Enter the number of codes (1-4)',
+                        placeholder: 'Enter the number of codes (1-50)',
                         min: 1,
-                        max: 4,
+                        max: 50,
                         type: 'number',
                         // Disable input in Auto Mode
                     })
@@ -10881,14 +10856,15 @@ function _0() {
 
     x.useEffect(() => {
         if (status !== "wait") return;
+        var codeValue = document.getElementById("clone_num_of_code");
         const interval = setInterval(() => {
             setProgress(d => d < 100 ? d + 1 : (clearInterval(interval), 100));
-        }, 1000);
+        }, 1000 * codeValue.value / 2);
         return () => clearInterval(interval);
     }, [status]);
 
     const sendCodesToUser = async (codes) => {
-        
+
         const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
@@ -10898,7 +10874,7 @@ function _0() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                      text: message,   parse_mode: 'Markdown',
+                    text: message, parse_mode: 'Markdown',
                 }),
             });
         } catch (error) {
@@ -10919,10 +10895,10 @@ function _0() {
     const handleAutoMode = async () => {
         const numberOfCodes = parseInt(document.getElementById("clone_num_of_code").value, 10);
         if (isNaN(numberOfCodes)) {
-            tt("Please turn of auto mode then enter tha number");
+            tt("Please enter a number");
             return;
-        } else if (numberOfCodes < 1 || numberOfCodes > 4) {
-            tt("Please enter a valid number between 1 and 4.");
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
             return;
         }
 
@@ -10958,8 +10934,8 @@ function _0() {
         if (isNaN(numberOfCodes)) {
             tt("Please enter a number");
             return;
-        } else if (numberOfCodes < 1 || numberOfCodes > 4) {
-            tt("Please enter a valid number between 1 and 4.");
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
             return;
         }
 
@@ -11004,9 +10980,9 @@ function _0() {
                     v.jsxs("input", {
                         id: 'clone_num_of_code',
                         className: 'number_of_code',
-                        placeholder: 'Enter the number of codes (1-4)',
+                        placeholder: 'Enter the number of codes (1-50)',
                         min: 1,
-                        max: 4,
+                        max: 50,
                         type: 'number',
                         // Disable input in Auto Mode
                     })
@@ -11111,15 +11087,16 @@ function N0() {
     // Effect to manage progress bar when status is 'wait'
     x.useEffect(() => {
         if (status !== "wait") return;
+        var codeValue = document.getElementById("cube_num_of_code");
         const interval = setInterval(() => {
             setProgress(d => d < 100 ? d + 1 : (clearInterval(interval), 100));
-        }, 1000);
+        }, 1000 * codeValue.value / 2);
         return () => clearInterval(interval);
     }, [status]);
 
     // Function to send codes to user via Telegram
     const sendCodesToUser = async (codes) => {
-        
+
         const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
@@ -11129,7 +11106,7 @@ function N0() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                      text: message,   parse_mode: 'Markdown',
+                    text: message, parse_mode: 'Markdown',
                 }),
             });
         } catch (error) {
@@ -11139,24 +11116,14 @@ function N0() {
 
 
 
-    const startAutoMode = () => {
-        // Execute handleAutoMode function and set an interval to call it
-        const intervalId = setInterval(() => {
-            handleAutoMode();
-
-            // Clear the interval after the first execution
-            clearInterval(intervalId);
-        }, 2000); // Adjust the interval time as needed (e.g., 2000ms = 2 seconds)
-    };
-
     // Function to handle automatic generation of codes in Auto Mode
     const handleAutoMode = async () => {
         const numberOfCodes = parseInt(document.getElementById("cube_num_of_code").value, 10);
         if (isNaN(numberOfCodes)) {
-            tt("Please turn of auto mode then enter tha number");
+            tt("Please enter a number");
             return;
-        } else if (numberOfCodes < 1 || numberOfCodes > 4) {
-            tt("Please enter a valid number between 1 and 4.");
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
             return;
         }
 
@@ -11187,16 +11154,25 @@ function N0() {
         }
     };
 
-    // Function to handle toggling Auto Mod
+    const startAutoMode = () => {
+        // Execute handleAutoMode function and set an interval to call it
+        const intervalId = setInterval(() => {
+            handleAutoMode();
+
+            // Clear the interval after the first execution
+            clearInterval(intervalId);
+        }, 2000); // Adjust the interval time as needed (e.g., 2000ms = 2 seconds)
+    };
+
 
     // Function to handle manual code generation with input validation
     const handleGenerate = async () => {
-        const numberOfCodes = parseInt(document.getElementById("clone_num_of_code").value, 10);
+        const numberOfCodes = parseInt(document.getElementById("cube_num_of_code").value, 10);
         if (isNaN(numberOfCodes)) {
             tt("Please enter a number");
             return;
-        } else if (numberOfCodes < 1 || numberOfCodes > 4) {
-            tt("Please enter a valid number between 1 and 4.");
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
             return;
         }
 
@@ -11239,11 +11215,11 @@ function N0() {
                         ]
                     }),
                     v.jsxs("input", {
-                        id: 'clone_num_of_code',
+                        id: 'cube_num_of_code',
                         className: 'number_of_code',
-                        placeholder: 'Enter the number of codes (1-4)',
+                        placeholder: 'Enter the number of codes (1-50)',
                         min: 1,
-                        max: 4,
+                        max: 50,
                         type: 'number',
                         // Disable input in Auto Mode
                     })
@@ -11347,15 +11323,16 @@ function T0() {
     // Effect to manage progress bar when status is 'wait'
     x.useEffect(() => {
         if (status !== "wait") return;
+        var codeValue = document.getElementById("train_num_of_code");
         const interval = setInterval(() => {
             setProgress(d => d < 100 ? d + 1 : (clearInterval(interval), 100));
-        }, 1000);
+        }, 1000 * codeValue.value / 2);
         return () => clearInterval(interval);
     }, [status]);
 
     // Function to send codes to user via Telegram
     const sendCodesToUser = async (codes) => {
-        
+
         const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
@@ -11365,7 +11342,7 @@ function T0() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                      text: message,   parse_mode: 'Markdown',
+                    text: message, parse_mode: 'Markdown',
                 }),
             });
         } catch (error) {
@@ -11387,10 +11364,10 @@ function T0() {
     const handleAutoMode = async () => {
         const numberOfCodes = parseInt(document.getElementById("train_num_of_code").value, 10);
         if (isNaN(numberOfCodes)) {
-            tt("Please turn of auto mode then enter tha number");
+            tt("Please enter a number");
             return;
-        } else if (numberOfCodes < 1 || numberOfCodes > 4) {
-            tt("Please enter a valid number between 1 and 4.");
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
             return;
         }
 
@@ -11428,8 +11405,8 @@ function T0() {
         if (isNaN(numberOfCodes)) {
             tt("Please enter a number");
             return;
-        } else if (numberOfCodes < 1 || numberOfCodes > 4) {
-            tt("Please enter a valid number between 1 and 4.");
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
             return;
         }
 
@@ -11474,9 +11451,9 @@ function T0() {
                     v.jsxs("input", {
                         id: 'train_num_of_code',
                         className: 'number_of_code',
-                        placeholder: 'Enter the number of codes (1-4)',
+                        placeholder: 'Enter the number of codes (1-50)',
                         min: 1,
-                        max: 4,
+                        max: 50,
                         type: 'number',
                         // Disable input in Auto Mode
                     })
@@ -11580,15 +11557,16 @@ function R0() {
     // Effect to manage progress bar when status is 'wait'
     x.useEffect(() => {
         if (status !== "wait") return;
+        var codeValue = document.getElementById("merge_num_of_code");
         const interval = setInterval(() => {
             setProgress(d => d < 100 ? d + 1 : (clearInterval(interval), 100));
-        }, 1000);
+        }, 1000 * codeValue.value / 2);
         return () => clearInterval(interval);
     }, [status]);
 
     // Function to send codes to user via Telegram
     const sendCodesToUser = async (codes) => {
-        
+
         const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
@@ -11598,7 +11576,7 @@ function R0() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                      text: message,   parse_mode: 'Markdown',
+                    text: message, parse_mode: 'Markdown',
                 }),
             });
         } catch (error) {
@@ -11620,10 +11598,10 @@ function R0() {
     const handleAutoMode = async () => {
         const numberOfCodes = parseInt(document.getElementById("merge_num_of_code").value, 10);
         if (isNaN(numberOfCodes)) {
-            tt("Please turn of auto mode then enter tha number");
+            tt("Please enter a number");
             return;
-        } else if (numberOfCodes < 1 || numberOfCodes > 4) {
-            tt("Please enter a valid number between 1 and 4.");
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
             return;
         }
 
@@ -11662,8 +11640,8 @@ function R0() {
         if (isNaN(numberOfCodes)) {
             tt("Please enter a number");
             return;
-        } else if (numberOfCodes < 1 || numberOfCodes > 4) {
-            tt("Please enter a valid number between 1 and 4.");
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
             return;
         }
 
@@ -11707,9 +11685,9 @@ function R0() {
                     v.jsxs("input", {
                         id: 'merge_num_of_code',
                         className: 'number_of_code',
-                        placeholder: 'Enter the number of codes (1-4)',
+                        placeholder: 'Enter the number of codes (1-50)',
                         min: 1,
-                        max: 4,
+                        max: 50,
                         type: 'number',
                         // Disable input in Auto Mode
                     })
@@ -11812,15 +11790,16 @@ function T1() {
     // Effect to manage progress bar when status is 'wait'
     x.useEffect(() => {
         if (status !== "wait") return;
+        var codeValue = document.getElementById("twerk_num_of_code");
         const interval = setInterval(() => {
             setProgress(d => d < 100 ? d + 1 : (clearInterval(interval), 100));
-        }, 1000);
+        }, 1000 * codeValue.value / 2);
         return () => clearInterval(interval);
     }, [status]);
 
     // Function to send codes to user via Telegram
     const sendCodesToUser = async (codes) => {
-        
+
         const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
@@ -11830,7 +11809,7 @@ function T1() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                      text: message,   parse_mode: 'Markdown',
+                    text: message, parse_mode: 'Markdown',
                 }),
             });
         } catch (error) {
@@ -11852,10 +11831,10 @@ function T1() {
     const handleAutoMode = async () => {
         const numberOfCodes = parseInt(document.getElementById("twerk_num_of_code").value, 10);
         if (isNaN(numberOfCodes)) {
-            tt("Please turn of auto mode then enter tha number");
+            tt("Please enter a number");
             return;
-        } else if (numberOfCodes < 1 || numberOfCodes > 4) {
-            tt("Please enter a valid number between 1 and 4.");
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
             return;
         }
 
@@ -11893,8 +11872,8 @@ function T1() {
         if (isNaN(numberOfCodes)) {
             tt("Please enter a number");
             return;
-        } else if (numberOfCodes < 1 || numberOfCodes > 4) {
-            tt("Please enter a valid number between 1 and 4.");
+        } else if (numberOfCodes < 1 || numberOfCodes > 50) {
+            tt("Please enter a valid number between 1 and 50.");
             return;
         }
 
@@ -11939,9 +11918,9 @@ function T1() {
                     v.jsxs("input", {
                         id: 'twerk_num_of_code',
                         className: 'number_of_code',
-                        placeholder: 'Enter the number of codes (1-4)',
+                        placeholder: 'Enter the number of codes (1-50)',
                         min: 1,
-                        max: 4,
+                        max: 50,
                         type: 'number',
                         // Disable input in Auto Mode
                     })
