@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // Your bot token
+        const token = '6983529729:AAGff8aNI8eKGiDHDjDwluANqrQYK6aiOlc';
+        const apiUrl = `https://api.telegram.org/bot${token}`;
+
+        // Array of bad words (customize as needed)
+        const badWords = ['aad', 'aand', 'bahenchod', 'behenchod', 'bhenchod', 'bhenchodd', 'b.c.', 'bc', 'bakchod', 'bakchodd', 'bakchodi', 'bevda', 'bewda', 'bevdey', 'bewday', 'bevakoof', 'bevkoof', 'bevkuf', 'bewakoof', 'bewkoof', 'bewkuf', 'bhadua', 'bhaduaa', 'bhadva', 'bhadvaa', 'bhadwa', 'bhadwaa', 'bhosada', 'bhosda', 'bhosdaa', 'bhosdike', 'bhonsdike', 'bsdk', 'b.s.d.k', 'bhosdiki', 'bhosdiwala', 'bhosdiwale', 'Bhosadchodal', 'Bhosadchod', 'babbe', 'babbey', 'bube', 'bubey', 'bur', 'burr', 'buurr', 'buur', 'charsi', 'chooche', 'choochi', 'chuchi', 'chhod', 'chod', 'chodd', 'chudne', 'chudney', 'chudwa', 'chudwaa', 'chudwane', 'chudwaane', 'choot', 'chut', 'chute', 'chutia', 'chutiya', 'chutiye', 'chuttad', 'chutad', 'dalaal', 'dalal', 'dalle', 'dalley', 'fattu', 'gadha', 'gadhe', 'gadhalund', 'gaand', 'gand', 'gandu', 'gandfat', 'gandfut', 'gandiya', 'gandiye', 'goo', 'gu', 'gote', 'gotey', 'gotte', 'hag', 'haggu', 'hagne', 'hagney', 'harami', 'haramjada', 'haraamjaada', 'haramzyada', 'haraamzyaada', 'haraamjaade', 'haraamzaade', 'haraamkhor', 'haramkhor', 'jhat', 'jhaat', 'jhaatu', 'jhatu', 'kutta', 'kutte', 'kuttey', 'kutia', 'kutiya', 'kuttiya', 'kutti', 'landi', 'landy', 'laude', 'laudey', 'laura', 'lora', 'lauda', 'ling', 'loda', 'lode', 'lund', 'launda', 'lounde', 'laundey', 'laundi', 'loundi', 'laundiya', 'loundiya', 'lulli', 'maar', 'maro', 'marunga', 'madarchod', 'madarchodd', 'madarchood', 'madarchoot', 'madarchut', 'm.c.', 'mc', 'mamme', 'mammey', 'moot', 'mut', 'mootne', 'mutne', 'mooth', 'muth', 'nunni', 'nunnu', 'paaji', 'paji', 'pesaab', 'pesab', 'peshaab', 'peshab', 'pilla', 'pillay', 'pille', 'pilley', 'pisaab', 'pisab', 'pkmkb', 'porkistan', 'raand', 'rand', 'randi', 'randy', 'suar', 'tatte', 'tatti', 'tatty', 'ullu']; // Replace with actual bad words
+
+        // Tracking warnings
+        const warnings = {}; // { userId: warningCount }
+
+        // Function to send requests to the Telegram Bot API
+        function sendRequest(method, params) {
+            const url = `${apiUrl}/${method}`;
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(params)
+            };
+            return fetch(url, options).then(response => response.json());
+        }
+
+        // Function to delete all messages of a user
+        function deleteAllMessages(chatId, userId) {
+            sendRequest('getUpdates').then(data => {
+                data.result.forEach(update => {
+                    const message = update.message;
+                    if (message && message.from.id === userId) {
+                        // Delete the message
+                        console.log("Deleting message:", message.message_id);
+                        sendRequest('deleteMessage', { chat_id: chatId, message_id: message.message_id });
+                    }
+                });
+            });
+        }
+
+        // Function to monitor incoming messages
+        function getUpdates(offset = 0) {
+            sendRequest('getUpdates', { offset }).then(data => {
+                data.result.forEach(update => {
+                    const message = update.message;
+                    if (message && message.text) {
+                        const chatId = message.chat.id;
+                        const userId = message.from.id;
+                        const username = message.from.username || message.from.first_name;
+                        const text = message.text.toLowerCase();
+
+                        // Check for bad words
+                        if (badWords.some(word => text.includes(word))) {
+                            if (!warnings[userId]) {
+                                warnings[userId] = 0;
+                            }
+
+                            warnings[userId] += 1;
+
+                            if (warnings[userId] >= 3) {
+                                // Delete all messages from the user
+                                deleteAllMessages(chatId, userId);
+
+                                // Ban the user
+                                sendRequest('kickChatMember', { chat_id: chatId, user_id: userId })
+                                    .then(() => {
+                                        // Notify the group
+                                        sendRequest('sendMessage', {
+                                            chat_id: chatId,
+                                            text: `User @${username} was banned after 3 warnings for using inappropriate language.`,
+                                        });
+                                    });
+                            } else {
+                                // Send warning message to the user
+                                sendRequest('sendMessage', {
+                                    chat_id: chatId,
+                                    text: `Warning ${warnings[userId]}/3: Please refrain from using inappropriate language. Further violations will result in a ban.`,
+                                });
+                            }
+                        }
+                    }
+                    // Update offset to avoid processing the same messages again
+                    offset = update.update_id + 1;
+                });
+
+                // Recursively call getUpdates to continuously check for new messages
+                getUpdates(offset);
+            });
+        }
+
+        // Start monitoring
+        getUpdates();
+
+    </script>
+</body>
+
+</html>
