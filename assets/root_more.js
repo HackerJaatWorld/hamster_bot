@@ -10615,7 +10615,8 @@ function x0() {
 
 
     const sendCodesToUser = async (codes) => {
-        const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
+        const formattedCodes = codes.map(code => `\`${code}\``);
+        const message = `Here are your generated codes:\n\n${formattedCodes.join('\n')}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
         try {
             await fetch(url, {
@@ -10623,7 +10624,7 @@ function x0() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                    text: message, parse_mode: 'Markdown',
+                    text: message, parse_mode: 'MarkdownV2',
                 }),
             });
         } catch (error) {
@@ -10865,7 +10866,8 @@ function _0() {
 
     const sendCodesToUser = async (codes) => {
 
-        const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
+        const formattedCodes = codes.map(code => `\`${code}\``);
+        const message = `Here are your generated codes:\n\n${formattedCodes.join('\n')}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
         try {
@@ -10874,7 +10876,7 @@ function _0() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                    text: message, parse_mode: 'Markdown',
+                    text: message, parse_mode: 'MarkdownV2',
                 }),
             });
         } catch (error) {
@@ -11097,7 +11099,8 @@ function N0() {
     // Function to send codes to user via Telegram
     const sendCodesToUser = async (codes) => {
 
-        const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
+        const formattedCodes = codes.map(code => `\`${code}\``);
+        const message = `Here are your generated codes:\n\n${formattedCodes.join('\n')}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
         try {
@@ -11106,7 +11109,7 @@ function N0() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                    text: message, parse_mode: 'Markdown',
+                    text: message, parse_mode: 'MarkdownV2',
                 }),
             });
         } catch (error) {
@@ -11333,7 +11336,8 @@ function T0() {
     // Function to send codes to user via Telegram
     const sendCodesToUser = async (codes) => {
 
-        const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
+        const formattedCodes = codes.map(code => `\`${code}\``);
+        const message = `Here are your generated codes:\n\n${formattedCodes.join('\n')}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
         try {
@@ -11342,7 +11346,7 @@ function T0() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                    text: message, parse_mode: 'Markdown',
+                    text: message, parse_mode: 'MarkdownV2',
                 }),
             });
         } catch (error) {
@@ -11567,7 +11571,8 @@ function R0() {
     // Function to send codes to user via Telegram
     const sendCodesToUser = async (codes) => {
 
-        const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
+        const formattedCodes = codes.map(code => `\`${code}\``);
+        const message = `Here are your generated codes:\n\n${formattedCodes.join('\n')}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
         try {
@@ -11576,7 +11581,7 @@ function R0() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                    text: message, parse_mode: 'Markdown',
+                    text: message, parse_mode: 'MarkdownV2',
                 }),
             });
         } catch (error) {
@@ -11800,7 +11805,8 @@ function T1() {
     // Function to send codes to user via Telegram
     const sendCodesToUser = async (codes) => {
 
-        const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
+        const formattedCodes = codes.map(code => `\`${code}\``);
+        const message = `Here are your generated codes:\n\n${formattedCodes.join('\n')}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
         try {
@@ -11809,7 +11815,7 @@ function T1() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                    text: message, parse_mode: 'Markdown',
+                    text: message, parse_mode: 'MarkdownV2',
                 }),
             });
         } catch (error) {
@@ -12025,7 +12031,8 @@ function PoLy() {
 
     const sendCodesToUser = async (codes) => {
 
-        const message = `Here are your generated codes:\n\n${codes.join('\n')}`;
+        const formattedCodes = codes.map(code => `\`${code}\``);
+        const message = `Here are your generated codes:\n\n${formattedCodes.join('\n')}`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
         try {
@@ -12034,7 +12041,7 @@ function PoLy() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     chat_id: userId,
-                    text: message, parse_mode: 'Markdown',
+                    text: message, parse_mode: 'MarkdownV2',
                 }),
             });
         } catch (error) {
