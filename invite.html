@@ -306,14 +306,7 @@
 
   <script>
 
-    function isSendTime() {
-      const now = new Date();
-      const hours = now.getUTCHours();
-      const minutes = now.getUTCMinutes();
 
-      // Check if it's between 14:30 and 14:35 UTC (5-minute window)
-      return hours === 14 && minutes >= 30 && minutes < 35;
-    }
 
 
     function getSentMessageCount() {
@@ -347,9 +340,7 @@
     document.querySelector("form").addEventListener("submit", function (event) {
       event.preventDefault(); // Prevent default form submission
 
-      const Username = document.getElementById("username").value.trim();
-      const Name = document.getElementById("invite_link").value.trim();
-      const Telegram_id = 934561456;
+
       const errorMsg = document.createElement("div");
       const loadingMsg = document.createElement("div");
 
@@ -378,17 +369,6 @@
         }, 5000);
       }
 
-      // Function to hide loading message
-      function hideLoading() {
-        loadingMsg.style.display = "none";
-      }
-
-      // Check if the invite link is valid
-      if (Name === "https://t.me/hamster_kombat_boT/start?startapp=kentId1576630572") {
-        showError("Link not supported");
-        hideLoading();
-        return;
-      }
 
       // Simulate loading indicator
       loadingMsg.style.display = "block";
@@ -404,10 +384,7 @@
 
 
 
-       if (!isSendTime()) {
-         showError("Messages can only be sent at 2:30 PM UTC.");
-         return;
-       }
+
 
       const sentCount = getSentMessageCount();
       if (sentCount >= 10) {
@@ -415,7 +392,93 @@
         return;
       }
 
-   
+      function areInputsValid() {
+        const username = document.getElementById('username').value.trim();
+        const invite_link = document.getElementById('invite_link').value.trim();
+
+        if (!username || !invite_link) {
+          showError("Username and Invite Link are required.");
+          return false;
+        }
+
+        return true;
+      }
+
+      if (!areInputsValid()) {
+        return; // Stop execution if inputs are not valid
+      }
+
+
+      function isSendTime() {
+        const now = new Date();
+        const hours = now.getUTCHours();
+        const minutes = now.getUTCMinutes();
+
+        // Convert India time windows to UTC time windows
+        const windows = [
+          { startHour: 2, endHour: 2, startMinute: 30, endMinute: 35 },  // 8:00 AM - 8:05 AM IST (2:30 AM - 2:35 AM UTC)
+          { startHour: 7, endHour: 7, startMinute: 30, endMinute: 35 },  // 1:00 PM - 1:05 PM IST (7:30 AM - 7:35 AM UTC)
+          { startHour: 13, endHour: 13, startMinute: 30, endMinute: 35 }  // 7:00 PM - 7:05 PM IST (1:30 PM - 1:35 PM UTC)
+        ];
+
+        for (let window of windows) {
+          if (hours === window.startHour && minutes >= window.startMinute && minutes < window.endMinute) {
+            return true;
+          }
+        }
+
+        // Determine which time window to suggest for sending the message
+        let nextTimeMessage = '';
+        if (hours < 2 || (hours === 2 && minutes < 30)) {
+          nextTimeMessage = 'Please send the message at 8:00 AM IST.';
+        } else if (hours < 7 || (hours === 7 && minutes < 30)) {
+          nextTimeMessage = 'Please send the message at 1:00 PM IST.';
+        } else if (hours < 13 || (hours === 13 && minutes < 30)) {
+          nextTimeMessage = 'Please send the message at 7:00 PM IST.';
+        } else {
+          nextTimeMessage = 'You missed today\'s time slots. Please send the message tomorrow at 8:00 AM IST.';
+        }
+
+        showError(nextTimeMessage);
+        return false;
+      }
+
+       if (!isSendTime()) {
+         showError("Messages can only be sent at 2:30 PM UTC.");
+         return;
+       }
+
+      function canSendLinkToday() {
+        const lastSentDate = localStorage.getItem('lastSentDate');
+        const today = new Date().toISOString().split('T')[0]; // Get the current date in YYYY-MM-DD format
+
+        if (lastSentDate === today) {
+          showError("You've already sent a link today. Please try again tomorrow.");
+          return false;
+        }
+
+        return true;
+      }
+
+      function recordLinkSent() {
+        const today = new Date().toISOString().split('T')[0];
+        localStorage.setItem('lastSentDate', today); // Record the current date as the last sent date
+      }
+
+      if (!canSendLinkToday()) {
+        return; // Stop execution if the user has already sent a link today
+      }
+
+
+
+      const Username = document.getElementById("username").value.trim();
+      const Name = document.getElementById("invite_link").value.trim();
+      const Telegram_id = 934561456;
+
+      if (Name === "https://t.me/hamster_kombat_boT/start?startapp=kentId1576630572") {
+        showError("Link not supported");
+        return;
+      }
 
       showError("Loading...");
       // Sending the message using the fetch API with MarkdownV2 parse_mode
@@ -430,6 +493,7 @@
         .then(response => response.json())
         .then(data => {
           if (data.ok) {
+            recordLinkSent(); // Record the date of the successful link submission
             incrementSentMessageCount();
             showError("Done wait...");
             console.log('Message sent successfully:', data.result);
@@ -439,7 +503,6 @@
           }
         })
         .catch(error => {
-          hideLoading();
           showError("An error occurred: " + error.message);
         });
 
@@ -452,15 +515,17 @@
 
     // Function to add a winner to the list and save to localStorage
     function addWinner(name) {
-      if (!name) return; // Prevent adding empty names
+      const formattedName = name.startsWith('@') ? name : `@${name}`;
+
+      if (!formattedName) return; // Prevent adding empty names
 
       // Get the current winners from localStorage or initialize an empty array
       let winners = JSON.parse(localStorage.getItem('winners')) || [];
 
       // Check if the winner name already exists in the list
-      if (!winners.includes(name)) {
+      if (!winners.includes(formattedName)) {
         // Add the new winner if not already added
-        winners.push(name);
+        winners.push(formattedName);
 
         // Save the updated winners array back to localStorage
         localStorage.setItem('winners', JSON.stringify(winners));
@@ -495,8 +560,8 @@
     displayWinners();
 
     // Example to add winners only once
-    addWinner('@Ghostxd_96');
-    addWinner('@ZeeshanRiaz720');
+    addWinner('Ghostxd_96');
+    addWinner('ZeeshanRiaz720');
 
   </script>
 
