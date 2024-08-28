@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hamster keys tools</title>
+  <title>invites</title>
 
   <style>
     body {
@@ -122,136 +122,7 @@
       background-color: #218838;
     }
 
-    #form {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 50vh;
-      /* background-color: #f7f7f7; */
-    }
-
-
-    form {
-      background-color: rgba(255, 255, 255, 0.563);
-      /* White color with 70% opacity */
-      backdrop-filter: blur(1px);
-      /* Adds a blur effect */
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 400px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-
-    form label {
-      font-size: 14px;
-      margin-bottom: 5px;
-      display: block;
-      color: #333;
-      font-weight: bold;
-    }
-
-    form input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-      font-size: 14px;
-    }
-
-    form button[type="submit"] {
-      width: 100%;
-      padding: 10px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s ease;
-    }
-
-    form button[type="submit"]:hover {
-      background-color: #0056b3;
-    }
-
-    /* Responsive Styles */
-    @media (max-width: 600px) {
-      form {
-        padding: 15px;
-      }
-
-      form label {
-        font-size: 12px;
-      }
-
-      form input[type="text"] {
-        padding: 8px;
-        font-size: 12px;
-      }
-
-      form button[type="submit"] {
-        padding: 8px;
-        font-size: 14px;
-      }
-    }
-
-
-    .error-message,
-    .loading-message {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 10px 20px;
-      border-radius: 5px;
-      font-size: 16px;
-      z-index: 1000;
-    }
-
-    .error-message {
-      background-color: #ff4d4d;
-      color: #fff;
-      display: none;
-    }
-
-    .loading-message {
-      background-color: #007bff;
-      color: #fff;
-      display: none;
-    }
-
-    .fade-in {
-      animation: msgin 0.5s forwards;
-    }
-
-    .fade-out {
-      animation: msgout 0.5s forwards;
-    }
-
-    @keyframes msgin {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes msgout {
-      from {
-        opacity: 1;
-      }
-
-      to {
-        opacity: 0;
-      }
-    }
+  
   </style>
 </head>
 
@@ -283,13 +154,7 @@
 
 
     <div id="form" style="display: none;">
-      <form action="#">
-        <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Enter TG Username">
-        <label for="invite_link">Invite Link</label>
-        <input type="text" id="invite_link" placeholder="Enter Your Invite Link">
-        <button type="submit">Request Now</button>
-      </form>
+     All tasks completed
     </div>
 
 
@@ -305,82 +170,6 @@
 
 
   <script>
-
-
-    document.querySelector("form").addEventListener("submit", function (event) {
-      event.preventDefault(); // Prevent default form submission
-
-      const username = document.getElementById("username").value.trim();
-      const inviteLink = document.getElementById("invite_link").value.trim();
-      const errorMsg = document.createElement("div");
-      const loadingMsg = document.createElement("div");
-
-      // Create error message element
-      errorMsg.classList.add("error-message");
-      document.body.appendChild(errorMsg);
-
-      // Create loading message element
-      loadingMsg.classList.add("loading-message");
-      loadingMsg.innerText = "Loading...";
-      document.body.appendChild(loadingMsg);
-
-      // Function to show error message with animation
-      function showError(message) {
-        errorMsg.innerText = message;
-        errorMsg.style.display = "block";
-        errorMsg.classList.add("fade-in");
-
-        setTimeout(function () {
-          errorMsg.classList.remove("fade-in");
-          errorMsg.classList.add("fade-out");
-          setTimeout(function () {
-            errorMsg.style.display = "none";
-            errorMsg.classList.remove("fade-out");
-          }, 500);
-        }, 5000);
-      }
-
-      // Function to hide loading message
-      function hideLoading() {
-        loadingMsg.style.display = "none";
-      }
-
-      // Check if the invite link is valid
-      if (inviteLink === "https://t.me/hamster_kombat_boT/start?startapp=kentId1576630572") {
-        showError("Link not supported");
-        hideLoading();
-        return;
-      }
-
-      // Simulate loading indicator
-      loadingMsg.style.display = "block";
-
-      // Sending data to Google Sheet
-      fetch("https://script.google.com/macros/s/AKfycbw5UkutOdVDkSV5laAMV_kOjTO4fZRE-GAau8P71K9o2AXSuUTnLpdSFMbMmcYKFDCl5g/exec", {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ username, inviteLink })
-      })
-        .then(response => response.json())
-        .then(data => {
-          hideLoading();
-          if (data.result === "success") {
-            alert("Data submitted successfully!");
-          } else {
-            showError("Failed to submit data");
-          }
-        })
-        .catch(error => {
-          hideLoading();
-          showError("An error occurred: " + error.message);
-        });
-    });
-
-
-
 
     // Function to add a winner to the list and save to localStorage
     function addWinner(name) {
