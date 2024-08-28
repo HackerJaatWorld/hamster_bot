@@ -273,7 +273,7 @@
       <p>Click on the go to button and keep the mini app open for 30 seconds, the task will be completed
         automatically
       </p>
-      <h2 style="font-style: italic;">Time (2:30pm UTC) Select only first 10 users</h2>
+      <h2 style="font-style: italic;"> Time (2:30pm UTC) Send only first 10 users</h2>
     </center>
     <hr>
 
@@ -308,8 +308,13 @@
 
     function isSendTime() {
       const now = new Date();
-      return now.getUTCHours() === 14 && now.getUTCMinutes() === 30;
+      const hours = now.getUTCHours();
+      const minutes = now.getUTCMinutes();
+
+      // Check if it's between 14:30 and 14:35 UTC (5-minute window)
+      return hours === 14 && minutes >= 30 && minutes < 35;
     }
+
 
     function getSentMessageCount() {
       const count = localStorage.getItem('sentMessageCount');
@@ -399,10 +404,10 @@
 
 
 
-      if (!isSendTime()) {
-        showError("Messages can only be sent at 2:30 PM UTC.");
-        return;
-      }
+       if (!isSendTime()) {
+         showError("Messages can only be sent at 2:30 PM UTC.");
+         return;
+       }
 
       const sentCount = getSentMessageCount();
       if (sentCount >= 10) {
@@ -410,6 +415,9 @@
         return;
       }
 
+   
+
+      showError("Loading...");
       // Sending the message using the fetch API with MarkdownV2 parse_mode
       fetch(url, {
         method: 'POST',
@@ -421,7 +429,6 @@
       })
         .then(response => response.json())
         .then(data => {
-          hideLoading();
           if (data.ok) {
             incrementSentMessageCount();
             showError("Done wait...");
@@ -488,7 +495,8 @@
     displayWinners();
 
     // Example to add winners only once
-    // addWinner('@Yash_chhikara : (2)'); 
+    addWinner('@Ghostxd_96');
+    addWinner('@ZeeshanRiaz720');
 
   </script>
 
@@ -578,7 +586,9 @@
 
     // Example ads array
     const ads = [
-    { ad_id: 'YT',ad_time: 7000, ad_name: 'Subscribe My Channel', img_url: 'https://static.vecteezy.com/system/resources/thumbnails/023/986/480/small_2x/youtube-logo-youtube-logo-transparent-youtube-icon-transparent-free-free-png.png' ,ad_url: 'https://www.youtube.com/@dailyhamastercards' },
+      { ad_id: 'YT', ad_time: 10000, ad_name: 'Subscribe My Channel', img_url: 'https://static.vecteezy.com/system/resources/thumbnails/023/986/480/small_2x/youtube-logo-youtube-logo-transparent-youtube-icon-transparent-free-free-png.png', ad_url: 'https://www.youtube.com/@dailyhamastercards' },
+       { ad_id: 'Ghostxd_96', ad_time: 10000, ad_name: 'Piggy (Ghostxd_96)', img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYFkiBRAnfGp3lT9_e4aEVg9Nwwp8wyQD9Xw&s', ad_url: 'https://t.me/PiggyPiggyofficialbot/game?startapp=share_7399383454' },
+       { ad_id: 'ZeeshanRiaz720', ad_time: 10000, ad_name: 'Cats (ZeeshanRiaz720)', img_url: 'https://miro.medium.com/v2/resize:fit:640/1*Xk2PdNVI6DDukb5vpi0lhw.jpeg', ad_url: 'http://t.me/catsgang_bot/join?startapp=e_ncDcFYzwTEZLTyx63k6' },
     ];
 
     // Display the ads
