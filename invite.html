@@ -416,10 +416,11 @@
 
         // Convert India time windows to UTC time windows
         const windows = [
-          { startHour: 2, endHour: 2, startMinute: 30, endMinute: 35 },  // 8:00 AM - 8:05 AM IST (2:30 AM - 2:35 AM UTC)
-          { startHour: 7, endHour: 7, startMinute: 30, endMinute: 35 },  // 1:00 PM - 1:05 PM IST (7:30 AM - 7:35 AM UTC)
-          { startHour: 13, endHour: 13, startMinute: 30, endMinute: 35 }  // 7:00 PM - 7:05 PM IST (1:30 PM - 1:35 PM UTC)
-        ];
+    { startHour: 2, endHour: 2, startMinute: 30, endMinute: 35 },  // 8:00 AM - 8:05 AM IST (2:30 AM - 2:35 AM UTC)
+    { startHour: 7, endHour: 7, startMinute: 30, endMinute: 35 },  // 1:00 PM - 1:05 PM IST (7:30 AM - 7:35 AM UTC)
+    { startHour: 13, endHour: 13, startMinute: 30, endMinute: 35 }, // 7:00 PM - 7:05 PM IST (1:30 PM - 1:35 PM UTC)
+    { startHour: 1, endHour: 1, startMinute: 0, endMinute: 5 }       // 1:00 AM - 1:05 AM IST (7:30 PM - 7:35 PM UTC previous day)
+];
 
         for (let window of windows) {
           if (hours === window.startHour && minutes >= window.startMinute && minutes < window.endMinute) {
