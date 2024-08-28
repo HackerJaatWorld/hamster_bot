@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hamster keys tools</title>
+
+  <style>
+    body {
+      background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzR1b3p5a3Vpb2pqYzg0NjBzazJidDlkanZmbmpyams0ZnV6bWoxZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/KDhlXzSZddh0A3ucno/giphy.webp');
+      background-position: top;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+
+
+    #navbar-iframe-container {
+      display: none;
+    }
+
+    #adsContainer {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      overflow: auto;
+      max-height: 70vh;
+    }
+
+    .ad {
+      display: grid;
+      grid-template-columns: 2fr 5fr 2fr;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.538);
+    }
+
+    .ad img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 2px solid black;
+      background: rgba(0, 0, 0, 0.912);
+    }
+
+    .ad button {
+      padding: 5px;
+      background: rgb(152, 152, 249);
+      border: none;
+      font-weight: 900;
+      border-radius: 10px;
+    }
+
+    .winner-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      padding: 20px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      display: none;
+      z-index: 100;
+    }
+
+    .winner-container h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    .winner-list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .winner-list li {
+      background-color: #007bff;
+      color: #ffffff;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: fadeIn 0.5s forwards;
+      max-height: 80vw;
+      overflow: auto;
+    }
+
+    /* Animation keyframes */
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Optional button styling for testing */
+    .add-winner-btn {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .add-winner-btn:hover {
+      background-color: #218838;
+    }
+
+    #form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 50vh;
+      /* background-color: #f7f7f7; */
+    }
+
+
+    form {
+      background-color: rgba(255, 255, 255, 0.563);
+      /* White color with 70% opacity */
+      backdrop-filter: blur(1px);
+      /* Adds a blur effect */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+
+    form label {
+      font-size: 14px;
+      margin-bottom: 5px;
+      display: block;
+      color: #333;
+      font-weight: bold;
+    }
+
+    form input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    form button[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    form button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+      form {
+        padding: 15px;
+      }
+
+      form label {
+        font-size: 12px;
+      }
+
+      form input[type="text"] {
+        padding: 8px;
+        font-size: 12px;
+      }
+
+      form button[type="submit"] {
+        padding: 8px;
+        font-size: 14px;
+      }
+    }
+
+
+    .error-message,
+    .loading-message {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      z-index: 1000;
+    }
+
+    .error-message {
+      background-color: #ff4d4d;
+      color: #fff;
+      display: none;
+    }
+
+    .loading-message {
+      background-color: #007bff;
+      color: #fff;
+      display: none;
+    }
+
+    .fade-in {
+      animation: msgin 0.5s forwards;
+    }
+
+    .fade-out {
+      animation: msgout 0.5s forwards;
+    }
+
+    @keyframes msgin {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes msgout {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <div class="winner-container" id="winner-container">
+    <h2>Winner List</h2>
+    <ul id="winnerList" class="winner-list"></ul>
+    <button class="add-winner-btn"
+      onclick="document.getElementById('winner-container').style.display = 'none'">Close</button>
+  </div>
+
+  <div id="ads_box">
+    <center>
+      <h3 style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Complete these
+        tasks,
+        it is for your benefit </h3>
+      <p>Click on the go to button and keep the mini app open for 30 seconds, the task will be completed
+        automatically
+      </p>
+      <h2 style="font-style: italic;">DM your invite link: Time (2:30pm UTC) Select only 5 users</h2>
+    </center>
+    <hr>
+
+    <div id="adsContainer">
+
+    </div>
+
+
+    <div id="form" style="display: none;">
+      <form action="#">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter TG Username">
+        <label for="invite_link">Invite Link</label>
+        <input type="text" id="invite_link" placeholder="Enter Your Invite Link">
+        <button type="submit">Request Now</button>
+      </form>
+    </div>
+
+
+
+    <center>
+      <button class="add-winner-btn"
+        onclick="document.getElementById('winner-container').style.display = 'block'">Winners List</button>
+    </center>
+  </div>
+
+
+
+
+
+  <script>
+
+
+    document.querySelector("form").addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent default form submission
+
+      const username = document.getElementById("username").value.trim();
+      const inviteLink = document.getElementById("invite_link").value.trim();
+      const errorMsg = document.createElement("div");
+      const loadingMsg = document.createElement("div");
+
+      // Create error message element
+      errorMsg.classList.add("error-message");
+      document.body.appendChild(errorMsg);
+
+      // Create loading message element
+      loadingMsg.classList.add("loading-message");
+      loadingMsg.innerText = "Loading...";
+      document.body.appendChild(loadingMsg);
+
+      // Function to show error message with animation
+      function showError(message) {
+        errorMsg.innerText = message;
+        errorMsg.style.display = "block";
+        errorMsg.classList.add("fade-in");
+
+        setTimeout(function () {
+          errorMsg.classList.remove("fade-in");
+          errorMsg.classList.add("fade-out");
+          setTimeout(function () {
+            errorMsg.style.display = "none";
+            errorMsg.classList.remove("fade-out");
+          }, 500);
+        }, 5000);
+      }
+
+      // Function to hide loading message
+      function hideLoading() {
+        loadingMsg.style.display = "none";
+      }
+
+      // Check if the invite link is valid
+      if (inviteLink === "https://t.me/hamster_kombat_boT/start?startapp=kentId1576630572") {
+        showError("Link not supported");
+        hideLoading();
+        return;
+      }
+
+      // Simulate loading indicator
+      loadingMsg.style.display = "block";
+
+      // Sending data to Google Sheet
+      fetch("https://script.google.com/macros/s/AKfycbw5UkutOdVDkSV5laAMV_kOjTO4fZRE-GAau8P71K9o2AXSuUTnLpdSFMbMmcYKFDCl5g/exec", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ username, inviteLink })
+      })
+        .then(response => response.json())
+        .then(data => {
+          hideLoading();
+          if (data.result === "success") {
+            alert("Data submitted successfully!");
+          } else {
+            showError("Failed to submit data");
+          }
+        })
+        .catch(error => {
+          hideLoading();
+          showError("An error occurred: " + error.message);
+        });
+    });
+
+
+
+
+    // Function to add a winner to the list and save to localStorage
+    function addWinner(name) {
+      if (!name) return; // Prevent adding empty names
+
+      // Get the current winners from localStorage or initialize an empty array
+      let winners = JSON.parse(localStorage.getItem('winners')) || [];
+
+      // Check if the winner name already exists in the list
+      if (!winners.includes(name)) {
+        // Add the new winner if not already added
+        winners.push(name);
+
+        // Save the updated winners array back to localStorage
+        localStorage.setItem('winners', JSON.stringify(winners));
+
+        // Display the updated list
+        displayWinners();
+      }
+    }
+
+    // Function to display winners from localStorage
+    function displayWinners() {
+      const winnerList = document.getElementById('winnerList');
+      winnerList.innerHTML = ''; // Clear the current list
+
+      // Get the current winners from localStorage
+      let winners = JSON.parse(localStorage.getItem('winners')) || [];
+
+      winners.reverse();
+
+      // Iterate through the winners and display each one
+      winners.forEach((winner, index) => {
+        const displayIndex = winners.length - index;
+        const listItem = document.createElement('li');
+        listItem.textContent = `${displayIndex}. ${winner}`;
+        winnerList.appendChild(listItem);
+      });
+    }
+
+
+
+    // Initial display of winners on page load
+    displayWinners();
+
+    // Example to add winners only once
+    addWinner('@Yash_chhikara : (2)'); // This will only run once
+    addWinner('@Parmila_singh'); // This will only run once
+    addWinner('@gplbro77'); // This will only run once
+    addWinner('@Vaibhavshu1234'); // This will only run once
+
+  </script>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    // Function to display multiple ads dynamically
+    function displayAds(ads) {
+      const adsContainer = document.getElementById('adsContainer');
+      let adsDisplayed = 0;
+
+      ads.forEach(ad => {
+        const adViewed = localStorage.getItem(`ad_${ad.ad_id}`);
+
+        if (!adViewed) {
+          const adElement = document.createElement('div');
+          adElement.classList.add('ad');
+          adElement.id = `ad_${ad.ad_id}`;
+
+          adElement.innerHTML = `
+                        <img src="${ad.img_url}" alt="${ad.ad_name}">
+                        <h2>${ad.ad_name}</h2>
+                        <button onclick="openAd('${ad.ad_id}', '${ad.ad_url}' , '${ad.ad_time}')">Go To</button>
+                    `;
+
+          adsContainer.appendChild(adElement);
+          adsDisplayed++;
+        }
+      });
+
+      // Display a message if all ads are viewed
+      if (adsDisplayed === 0) {
+        document.getElementById('form').style.display = 'flex';
+      }
+    }
+
+    // Function to open the ad URL and track time spent
+    function openAd(ad_id, ad_url, ad_time) {
+      const adKey = `ad_${ad_id}`;
+      const adViewed = localStorage.getItem(adKey);
+
+      if (adViewed) {
+        console.log(`Ad ${ad_id} has already been viewed.`);
+      } else {
+        console.log(`Opening ad ${ad_id}...`);
+
+        const startTime = Date.now();
+
+        // Open the ad link using Telegram WebApp API
+        Telegram.WebApp.openLink(ad_url);
+
+        // Set an interval to track the time spent
+        const interval = setInterval(() => {
+          const timeSpent = Date.now() - startTime;
+          console.log(`Ad ${ad_id} open time: ${Math.floor(timeSpent / 1000)} seconds`);
+
+          if (timeSpent >= ad_time) { // 30 seconds
+            clearInterval(interval);
+            localStorage.setItem(adKey, true);
+            console.log(`Ad ${ad_id} viewed for 30 seconds. Marking as viewed and removing ad.`);
+
+            // Remove the ad from the container
+            const adElement = document.getElementById(adKey);
+            if (adElement) adElement.remove();
+
+            // Check if all ads have been viewed
+            checkAllAdsViewed();
+          }
+        }, 1000);
+      }
+    }
+
+
+    function removeAdFromStorage(ad_id) {
+      localStorage.removeItem(`ad_${ad_id}`);
+      console.log(`Ad ${ad_id} has been removed from localStorage.`);
+    }
+
+    // removeAdFromStorage(1);
+
+    // Function to check if all ads have been viewed
+    function checkAllAdsViewed() {
+      const adsContainer = document.getElementById('adsContainer');
+      if (adsContainer.childElementCount === 0) {
+        document.getElementById('form').style.display = 'flex';
+      }
+    }
+
+    // Example ads array
+    const ads = [
+      { ad_id: '1', ad_time: 2000, ad_name: 'test', img_url: 'img/t.jpg', ad_url: '' },
+    ];
+
+    // Display the ads
+    displayAds(ads);
+  </script>
+
+
+</body>
+
+</html>
