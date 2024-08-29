@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Version: 1.0.1</title>
+  <title>Hamster keys tools</title>
 
   <style>
     body {
@@ -416,46 +416,37 @@
 
         // Convert India time windows to UTC time windows
         const windows = [
-    { startHour: 1, endHour: 1, startMinute: 20, endMinute: 25 },    // 1:20 AM - 1:25 AM IST
-    { startHour: 2, endHour: 2, startMinute: 30, endMinute: 35 },    // 8:00 AM - 8:05 AM IST
-    { startHour: 7, endHour: 7, startMinute: 30, endMinute: 35 },    // 1:00 PM - 1:05 PM IST
-    { startHour: 13, endHour: 13, startMinute: 30, endMinute: 35 }   // 7:00 PM - 7:05 PM IST
-];
+          { startHour: 2, endHour: 2, startMinute: 30, endMinute: 35 },  // 8:00 AM - 8:05 AM IST (2:30 AM - 2:35 AM UTC)
+          { startHour: 7, endHour: 7, startMinute: 30, endMinute: 35 },  // 1:00 PM - 1:05 PM IST (7:30 AM - 7:35 AM UTC)
+          { startHour: 13, endHour: 13, startMinute: 30, endMinute: 35 }  // 7:00 PM - 7:05 PM IST (1:30 PM - 1:35 PM UTC)
+        ];
 
-function isSendTime() {
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-
-    for (let window of windows) {
-        if (hours === window.startHour && minutes >= window.startMinute && minutes < window.endMinute) {
+        for (let window of windows) {
+          if (hours === window.startHour && minutes >= window.startMinute && minutes < window.endMinute) {
             return true;
+          }
         }
-    }
 
-    // Determine which time window to suggest for sending the message
-    let nextTimeMessage = '';
-    if (hours < 1 || (hours === 1 && minutes < 35)) {
-        nextTimeMessage = 'Please send the message at 1:20 AM IST.';
-    } else if (hours < 2 || (hours === 2 && minutes < 30)) {
-        nextTimeMessage = 'Please send the message at 8:00 AM IST.';
-    } else if (hours < 7 || (hours === 7 && minutes < 30)) {
-        nextTimeMessage = 'Please send the message at 1:00 PM IST.';
-    } else if (hours < 13 || (hours === 13 && minutes < 30)) {
-        nextTimeMessage = 'Please send the message at 7:00 PM IST.';
-    } else {
-        nextTimeMessage = 'You missed today\'s time slots. Please send the message tomorrow at 1:20 AM IST.';
-    }
+        // Determine which time window to suggest for sending the message
+        let nextTimeMessage = '';
+        if (hours < 2 || (hours === 2 && minutes < 30)) {
+          nextTimeMessage = 'Please send the message at 8:00 AM IST.';
+        } else if (hours < 7 || (hours === 7 && minutes < 30)) {
+          nextTimeMessage = 'Please send the message at 1:00 PM IST.';
+        } else if (hours < 13 || (hours === 13 && minutes < 30)) {
+          nextTimeMessage = 'Please send the message at 7:00 PM IST.';
+        } else {
+          nextTimeMessage = 'You missed today\'s time slots. Please send the message tomorrow at 8:00 AM IST.';
+        }
 
-    showError(nextTimeMessage);
-    return false;
-}
+        showError(nextTimeMessage);
+        return false;
+      }
 
-
-// Example usage
-if (!isSendTime()) {
-    return;
-}
+       if (!isSendTime()) {
+         showError("Messages can only be sent at 2:30 PM UTC.");
+         return;
+       }
 
       function canSendLinkToday() {
         const lastSentDate = localStorage.getItem('lastSentDate');
