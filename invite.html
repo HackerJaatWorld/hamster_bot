@@ -411,55 +411,38 @@
       }
 
 
-      // function isSendTime() {
-      //   const now = new Date();
-      //   const hours = now.getUTCHours();
-      //   const minutes = now.getUTCMinutes();
-
-      //   // Convert India time windows to UTC time windows
-      //   const windows = [
-      //     { startHour: 2, endHour: 2, startMinute: 30, endMinute: 35 },  // 8:00 AM - 8:05 AM IST (2:30 AM - 2:35 AM UTC)
-      //     { startHour: 7, endHour: 7, startMinute: 30, endMinute: 35 },  // 1:00 PM - 1:05 PM IST (7:30 AM - 7:35 AM UTC)
-      //     { startHour: 13, endHour: 13, startMinute: 30, endMinute: 35 }  // 7:00 PM - 7:05 PM IST (1:30 PM - 1:35 PM UTC)
-      //   ];
-
-      //   for (let window of windows) {
-      //     if (hours === window.startHour && minutes >= window.startMinute && minutes < window.endMinute) {
-      //       return true;
-      //     }
-      //   }
-
-      //   // Determine which time window to suggest for sending the message
-      //   let nextTimeMessage = '';
-      //   if (hours < 2 || (hours === 2 && minutes < 30)) {
-      //     nextTimeMessage = 'Please send the message at 8:00 AM IST.';
-      //   } else if (hours < 7 || (hours === 7 && minutes < 30)) {
-      //     nextTimeMessage = 'Please send the message at 1:00 PM IST.';
-      //   } else if (hours < 13 || (hours === 13 && minutes < 30)) {
-      //     nextTimeMessage = 'Please send the message at 7:00 PM IST.';
-      //   } else {
-      //     nextTimeMessage = 'You missed today\'s time slots. Please send the message tomorrow at 8:00 AM IST.';
-      //   }
-
-      //   showError(nextTimeMessage);
-      //   return false;
-      // }
-
-
       function isSendTime() {
         const now = new Date();
+        const hours = now.getUTCHours();
         const minutes = now.getUTCMinutes();
-        const remainingMinutes = 5 - (minutes % 5); // Calculate remaining minutes until the next 5-minute window
 
-        if (remainingMinutes === 5) {
-          // It's exactly on a 5-minute mark, allow sending
-          return true;
-        } else {
-          // Show an error with the remaining time until the next 5-minute window
-          const nextTimeMessage = `Please wait ${remainingMinutes} minute(s) until the next available window.`;
-          showError(nextTimeMessage);
-          return false;
+        // Convert India time windows to UTC time windows
+        const windows = [
+          { startHour: 2, endHour: 2, startMinute: 30, endMinute: 35 },  // 8:00 AM - 8:05 AM IST (2:30 AM - 2:35 AM UTC)
+          { startHour: 7, endHour: 7, startMinute: 30, endMinute: 35 },  // 1:00 PM - 1:05 PM IST (7:30 AM - 7:35 AM UTC)
+          { startHour: 13, endHour: 13, startMinute: 30, endMinute: 35 }  // 7:00 PM - 7:05 PM IST (1:30 PM - 1:35 PM UTC)
+        ];
+
+        for (let window of windows) {
+          if (hours === window.startHour && minutes >= window.startMinute && minutes < window.endMinute) {
+            return true;
+          }
         }
+
+        // Determine which time window to suggest for sending the message
+        let nextTimeMessage = '';
+        if (hours < 2 || (hours === 2 && minutes < 30)) {
+          nextTimeMessage = 'Please send the message at 8:00 AM IST.';
+        } else if (hours < 7 || (hours === 7 && minutes < 30)) {
+          nextTimeMessage = 'Please send the message at 1:00 PM IST.';
+        } else if (hours < 13 || (hours === 13 && minutes < 30)) {
+          nextTimeMessage = 'Please send the message at 7:00 PM IST.';
+        } else {
+          nextTimeMessage = 'You missed today\'s time slots. Please send the message tomorrow at 8:00 AM IST.';
+        }
+
+        showError(nextTimeMessage);
+        return false;
       }
 
       if (!isSendTime()) {
@@ -692,10 +675,10 @@
       // { ad_id: 'mu7eeb', ad_time: 10000, ad_name: 'Ducks (mu7eeb)', img_url: 'https://app.duckcoop.xyz/logo/logo.png', ad_url: 'https://t.me/duckscoop_bot/app?startapp=fC5ZLaLKaw' },
       // {ad_id: 'ZeeshanRiaz720',ad_time:20000, ad_name: 'Major (ZeeshanRiaz720)', img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy9FQaQczxhvflUNSftUiYb-PiQQ8Ui3u2QQmYkuHzWY4RPzxf0XoxECG7EvTZWkJomkY&usqp=CAU', ad_url: 'https://t.me/major/start?startapp=6905806028'},
       // {ad_id: 'AshishThakor2001',ad_time:20000, ad_name: 'Cheery (AshishThakor2001)', img_url: 'https://img.freepik.com/premium-photo/adorable-cherry-cartoon_942686-12972.jpg', ad_url: 'https://t.me/cherrygame_io_bot/game?startapp=r_1051493040'},
-      { ad_id: 'My_Cats', ad_time: 10000, ad_name: 'Cats', img_url: 'https://miro.medium.com/v2/resize:fit:640/1*Xk2PdNVI6DDukb5vpi0lhw.jpeg', ad_url: 'https://t.me/catsgang_bot/join?startapp=gOhFclfE-RS9YxdEU7OgT' },
+      { ad_id: 'Vrcarry', ad_time: 10000, ad_name: 'Cats (Vrcarry)', img_url: 'https://miro.medium.com/v2/resize:fit:640/1*Xk2PdNVI6DDukb5vpi0lhw.jpeg', ad_url: 'http://t.me/catsgang_bot/join?startapp=Rwfpy3ORnWG6C0BQpjuMx' },
+      { ad_id: 'Abhishekshahane2002', ad_time: 10000, ad_name: 'Tomarket (Abhishekshahane2002)', img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjE9BM0sI08drASDE9jYo3YerCam6GZoUCrw&s', ad_url: 'https://t.me/Tomarket_ai_bot/app?startapp=0000fQV5' },
       // { ad_id: 'Oshiba', ad_time: 10000, ad_name: 'Cats (Oshiba)', img_url: 'https://miro.medium.com/v2/resize:fit:640/1*Xk2PdNVI6DDukb5vpi0lhw.jpeg', ad_url: 'http://t.me/catsgang_bot/join?startapp=6zp578mJJX-Ca384QDmcs' },
       //  { ad_id: 'Yo131275', ad_time: 10000, ad_name: 'Tomarket (Yo131275)', img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjE9BM0sI08drASDE9jYo3YerCam6GZoUCrw&s', ad_url: 'https://t.me/Tomarket_ai_bot/app?startapp=00002Q1L' },
-       { ad_id: 'Offer', ad_time: 10000, ad_name: 'Tomarket (Harsh shahane🦴)', img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjE9BM0sI08drASDE9jYo3YerCam6GZoUCrw&s', ad_url: 'https://t.me/Tomarket_ai_bot/app?startapp=0000nPdE' },
     ];
 
     // Display the ads
