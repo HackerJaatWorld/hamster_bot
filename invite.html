@@ -315,7 +315,10 @@
       <h2 style="font-style: italic;">
         Time: (2:30 AM, 7:30 AM, 1:30 PM) UTC
       </h2>
+      <div id="timer">Time remaining: <span id="time"></span></div>
+
     </center>
+
     <hr>
 
     <div id="adsContainer">
@@ -355,7 +358,38 @@
 
   <script>
 
+    function updateTimer() {
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentMinutes = now.getMinutes();
+      const currentSeconds = now.getSeconds();
 
+      // Check if it's 9 PM
+      if (currentHour === 21) {
+        document.getElementById("timer").remove(); // Remove timer from DOM
+        clearInterval(timerInterval); // Stop the timer
+        return;
+      }
+
+      // Calculate the remaining time until 9 PM
+      const targetTime = new Date();
+      targetTime.setHours(21, 0, 0, 0); // Set target time to 9:00 PM
+      const remainingTime = targetTime - now;
+
+      // Convert remaining time into hours, minutes, and seconds
+      const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+
+      // Display the remaining time
+      document.getElementById("time").textContent = `${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    // Update the timer every second
+    const timerInterval = setInterval(updateTimer, 1000);
+
+    // Initial call to display the timer immediately
+    updateTimer();
 
 
     function getSentMessageCount() {
@@ -467,7 +501,8 @@
         const windows = [
           { startHour: 2, endHour: 2, startMinute: 30, endMinute: 35 },  // 8:00 AM - 8:05 AM IST (2:30 AM - 2:35 AM UTC)
           { startHour: 7, endHour: 7, startMinute: 30, endMinute: 35 },  // 1:00 PM - 1:05 PM IST (7:30 AM - 7:35 AM UTC)
-          { startHour: 13, endHour: 13, startMinute: 30, endMinute: 35 }  // 7:00 PM - 7:05 PM IST (1:30 PM - 1:35 PM UTC)
+          { startHour: 13, endHour: 13, startMinute: 30, endMinute: 35 }, // 7:00 PM - 7:05 PM IST (1:30 PM - 1:35 PM UTC)
+          { startHour: 15, endHour: 15, startMinute: 30, endMinute: 35 } // 9:00 PM - 9:05 PM IST (2:00 PM - 2:05 PM UTC)
         ];
 
         for (let window of windows) {
@@ -484,6 +519,8 @@
           nextTimeMessage = 'Please send the message at 1:00 PM IST.';
         } else if (hours < 13 || (hours === 13 && minutes < 30)) {
           nextTimeMessage = 'Please send the message at 7:00 PM IST.';
+        } else if (hours < 15 || (hours === 15 && minutes < 30)) {
+          nextTimeMessage = 'Please send the message at 9:00 PM IST.';
         } else {
           nextTimeMessage = 'You missed today\'s time slots. Please send the message tomorrow at 8:00 AM IST.';
         }
@@ -728,7 +765,6 @@
       }
     }
 
-    // Example ads array
     const ads = [
       { ad_id: 'YT', ad_time: 10000, ad_name: 'Subscribe My Channel', img_url: 'https://static.vecteezy.com/system/resources/thumbnails/023/986/480/small_2x/youtube-logo-youtube-logo-transparent-youtube-icon-transparent-free-free-png.png', ad_url: 'https://www.youtube.com/@dailyhamastercards' },
 
